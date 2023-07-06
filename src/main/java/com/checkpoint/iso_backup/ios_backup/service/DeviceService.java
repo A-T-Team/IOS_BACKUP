@@ -7,7 +7,7 @@ import java.util.List;
 public interface DeviceService {
     List<Device> findAll();
 
-    List<Device> findAllDevicesByVendor(String vendor);
+//    List<Device> findAllDevicesByVendor(String vendor);
 
     Device findDeviceById(int id);
 

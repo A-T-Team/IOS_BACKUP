@@ -1,48 +1,56 @@
 package com.checkpoint.iso_backup.ios_backup.service;
 
-import com.checkpoint.iso_backup.ios_backup.dao.DeviceDAO;
+import com.checkpoint.iso_backup.ios_backup.dao.DeviceRepository;
 import com.checkpoint.iso_backup.ios_backup.entity.Device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeviceServiceImpl implements DeviceService{
 
-    private DeviceDAO deviceDAO;
+    private DeviceRepository deviceRepository;
 
     @Autowired
-    public DeviceServiceImpl(DeviceDAO deviceDAO) {
-        this.deviceDAO = deviceDAO;
+    public DeviceServiceImpl(DeviceRepository deviceRepository) {
+        this.deviceRepository = deviceRepository;
     }
 
     @Override
     public List<Device> findAll() {
-        return deviceDAO.findAll();
+        return deviceRepository.findAll();
     }
 
-    @Override
-    public List<Device> findAllDevicesByVendor(String vendor) {
-        return deviceDAO.findAllDevicesByVendor(vendor);
-    }
+//    @Override
+//    public List<Device> findAllDevicesByVendor(String vendor) {
+//        return deviceRepository.findAllDevicesByVendor(vendor);
+//    }
 
     @Override
     public Device findDeviceById(int id) {
-        return deviceDAO.findDeviceById(id);
+        Optional<Device> res = deviceRepository.findById(id);
+        Device device = null;
+        if (res.isPresent()) {
+            device = res.get();
+        } else {
+            throw new RuntimeException("Device not found: " + id);
+        }
+        return device;
     }
 
     @Transactional
     @Override
     public Device saveDevice(Device device) {
-        return deviceDAO.saveDevice(device);
+        return deviceRepository.save(device);
     }
 
     @Transactional
     @Override
     public void deleteDeviceById(int id) {
-        deviceDAO.deleteDeviceById(id);
+        deviceRepository.deleteById(id);
     }
 
 }
