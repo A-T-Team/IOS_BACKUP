@@ -24,10 +24,10 @@ public class DeviceServiceImpl implements DeviceService{
         return deviceRepository.findAll();
     }
 
-//    @Override
-//    public List<Device> findAllDevicesByVendor(String vendor) {
-//        return deviceRepository.findAllDevicesByVendor(vendor);
-//    }
+    @Override
+    public List<Device> findAllByVendor(String vendor) {
+        return deviceRepository.findAllByVendor(vendor);
+    }
 
     @Override
     public Device findDeviceById(int id) {

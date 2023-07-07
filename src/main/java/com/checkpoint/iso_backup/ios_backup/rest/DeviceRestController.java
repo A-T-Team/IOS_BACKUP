@@ -23,10 +23,10 @@ public class DeviceRestController {
         return deviceService.findAll();
     }
 
-//    @GetMapping("/devices/vendor/{vendor}")
-//    public List<Device> findAllDevicesByVendor(@PathVariable String vendor) {
-//        return deviceService.findAllDevicesByVendor(vendor);
-//    }
+    @GetMapping("/devices/vendor/{vendor}")
+    public List<Device> findAllDevicesByVendor(@PathVariable String vendor) {
+        return deviceService.findAllByVendor(vendor);
+    }
 
     @GetMapping("/devices/id/{id}")
     public Device findDeviceById(@PathVariable int id) {
