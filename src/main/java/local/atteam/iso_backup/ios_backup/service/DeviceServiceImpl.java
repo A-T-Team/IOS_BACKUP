@@ -1,7 +1,7 @@
-package com.checkpoint.iso_backup.ios_backup.service;
+package local.atteam.iso_backup.ios_backup.service;
 
-import com.checkpoint.iso_backup.ios_backup.dao.DeviceRepository;
-import com.checkpoint.iso_backup.ios_backup.entity.Device;
+import local.atteam.iso_backup.ios_backup.dao.DeviceRepository;
+import local.atteam.iso_backup.ios_backup.entity.Device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

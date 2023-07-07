@@ -1,6 +1,6 @@
-package com.checkpoint.iso_backup.ios_backup.service;
+package local.atteam.iso_backup.ios_backup.service;
 
-import com.checkpoint.iso_backup.ios_backup.entity.Device;
+import local.atteam.iso_backup.ios_backup.entity.Device;
 
 import java.util.List;
 

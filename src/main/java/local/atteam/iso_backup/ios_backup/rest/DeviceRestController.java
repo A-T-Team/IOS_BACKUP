@@ -1,7 +1,7 @@
-package com.checkpoint.iso_backup.ios_backup.rest;
+package local.atteam.iso_backup.ios_backup.rest;
 
-import com.checkpoint.iso_backup.ios_backup.entity.Device;
-import com.checkpoint.iso_backup.ios_backup.service.DeviceService;
+import local.atteam.iso_backup.ios_backup.entity.Device;
+import local.atteam.iso_backup.ios_backup.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.checkpoint.iso_backup.ios_backup;
+package local.atteam.iso_backup.ios_backup;
 
 public interface Switch {
 

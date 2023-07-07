@@ -1,4 +1,4 @@
-package com.checkpoint.iso_backup.ios_backup.entity;
+package local.atteam.iso_backup.ios_backup.entity;
 
 
 import jakarta.persistence.*;
