@@ -37,6 +37,11 @@ public class DeviceRestController {
         return device;
     }
 
+    @GetMapping("/devices/name/{name}")
+    public Device findDeviceByName(@PathVariable String name) {
+        return deviceService.findDeviceByName(name);
+    }
+
     @PostMapping("/devices")
     public Device addDevice(@RequestBody Device device) {
         device.setId(0);

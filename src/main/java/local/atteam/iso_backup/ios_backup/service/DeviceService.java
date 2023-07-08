@@ -11,6 +11,8 @@ public interface DeviceService {
 
     Device findDeviceById(int id);
 
+    Device findDeviceByName(String name);
+
     Device saveDevice(Device device);
 
     void deleteDeviceById(int id);

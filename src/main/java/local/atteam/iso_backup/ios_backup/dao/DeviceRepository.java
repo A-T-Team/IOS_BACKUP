@@ -8,4 +8,6 @@ import java.util.List;
 public interface DeviceRepository extends JpaRepository<Device, Integer> {
     public List<Device> findAllByVendor(String vendor);
 
+    public Device findDeviceByName(String name);
+
 }
