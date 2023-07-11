@@ -25,7 +25,7 @@ public class SSHCommand {
             InputStream inputStream = channel.getInputStream();
             channel.connect();
             byte[] byteObject = new byte[10240];
-            while (true) {
+            do {
                 while (inputStream.available() > 0) {
                     int readByte = inputStream.read(byteObject, 0, 1024);
                     if (readByte < 0)
@@ -33,10 +33,8 @@ public class SSHCommand {
                     temp = new String(byteObject, 0, readByte);
                     res = res + temp;
                 }
-                if (channel.isClosed())
-                    break;
 
-            }
+            } while (!channel.isClosed());
             channel.disconnect();
 
         } catch (Exception e) {

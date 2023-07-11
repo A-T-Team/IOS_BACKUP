@@ -3,7 +3,10 @@ package local.atteam.iso_backup.ios_backup.utility;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import local.atteam.iso_backup.ios_backup.entity.Device;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SSHSession {
     String userName;
     String password;
@@ -11,7 +14,10 @@ public class SSHSession {
     int port;
     Session session;
 
-    public SSHSession(String userName, String password, String hostIp, int port) {
+    public SSHSession() {
+    }
+
+    public SSHSession(String userName, String password, String hostIp, int port) throws JSchException {
         this.userName = userName;
         this.password = password;
         this.hostIp = hostIp;
@@ -19,8 +25,17 @@ public class SSHSession {
         this.session = createSession();
     }
 
-    private Session createSession() {
-        try {
+    public SSHSession(Device device) throws JSchException {
+        this.userName = device.getUser();
+        this.password = device.getPassword();
+        this.hostIp = device.getIp();
+        this.port = device.getPort();
+        this.session = createSession();
+
+    }
+
+    private Session createSession() throws JSchException {
+
             JSch jSch = new JSch();
             Session session = jSch.getSession(userName, hostIp, port);
             session.setPassword(password);
@@ -30,10 +45,6 @@ public class SSHSession {
             System.out.println(session);
             return session;
 
-        } catch (JSchException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public void closeSession() {
