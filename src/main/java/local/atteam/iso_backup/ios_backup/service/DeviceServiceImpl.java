@@ -1,6 +1,7 @@
 package local.atteam.iso_backup.ios_backup.service;
 
 import com.jcraft.jsch.JSchException;
+import local.atteam.iso_backup.ios_backup.dao.BackupRepository;
 import local.atteam.iso_backup.ios_backup.dao.DeviceRepository;
 import local.atteam.iso_backup.ios_backup.entity.Backup;
 import local.atteam.iso_backup.ios_backup.entity.Device;
@@ -24,15 +25,27 @@ public class DeviceServiceImpl implements DeviceService {
 
 
     private DeviceRepository deviceRepository;
+    private BackupRepository backupRepository;
+
+//    @Autowired
+//    public DeviceServiceImpl(DeviceRepository deviceRepository) {
+//        this.deviceRepository = deviceRepository;
+//    }
 
     @Autowired
-    public DeviceServiceImpl(DeviceRepository deviceRepository) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, BackupRepository backupRepository) {
         this.deviceRepository = deviceRepository;
+        this.backupRepository = backupRepository;
     }
 
     @Override
     public List<Device> findAll() {
         return deviceRepository.findAll();
+    }
+
+    @Override
+    public List<Backup> findAllBackups() {
+        return backupRepository.findAll();
     }
 
     @Override
@@ -71,6 +84,23 @@ public class DeviceServiceImpl implements DeviceService {
             throw new DeviceExistsException("Device with IP " + ip + " already exists.");
         }
         return deviceRepository.save(device);
+    }
+
+    @Transactional
+    @Override
+    public Backup saveBackup(Backup backup) {
+        return backupRepository.save(backup);
+    }
+
+    @Override
+    public List<Backup> findAllByDeviceId(int id) {
+        return backupRepository.findAllByDeviceId(id);
+    }
+
+    @Override
+    public List<Backup> findAllBackupsOfADevice(Device device) {
+        Device deviceByIp = findDeviceByIp(device.getIp());
+        return findAllByDeviceId(deviceByIp.getId());
     }
 
     @Transactional
@@ -116,7 +146,7 @@ public class DeviceServiceImpl implements DeviceService {
             session.closeSession();
         }
         System.out.println(backup.getPayload());
-        return backup;
+        return backupRepository.save(backup);
     }
 
 

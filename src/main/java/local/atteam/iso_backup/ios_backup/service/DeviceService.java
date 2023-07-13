@@ -10,6 +10,8 @@ import java.util.List;
 public interface DeviceService {
     List<Device> findAll();
 
+    List<Backup> findAllBackups();
+
     List<Device> findAllByVendor(String vendor);
 
     Device findDeviceById(int id);
@@ -19,6 +21,12 @@ public interface DeviceService {
     Device findDeviceByIp(String ip);
 
     Device saveDevice(Device device);
+
+    Backup saveBackup(Backup backup);
+
+    List<Backup> findAllByDeviceId(int id);
+
+    List<Backup> findAllBackupsOfADevice(Device device);
 
     void deleteDeviceById(int id);
 
