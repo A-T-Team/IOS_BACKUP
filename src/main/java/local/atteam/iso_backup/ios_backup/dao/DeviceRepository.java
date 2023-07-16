@@ -14,4 +14,7 @@ public interface DeviceRepository extends JpaRepository<Device, Integer> {
 
 
 
+
+
+
 }
