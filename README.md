@@ -18,8 +18,15 @@ The Network Device Configuration Backup Tool is a versatile and reliable applica
 
 
 
-Contributing
+## Contributing
+
 Contributions to the Network Device Configuration Backup Tool are welcome and encouraged! If you find any issues or have suggestions for improvements, please submit a pull request or create an issue in the GitHub repository. For major changes, please open a discussion first to ensure your proposed changes align with the project's goals.
 
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
+---
+
+**Disclaimer:** This application is provided as-is, without any warranties or guarantees. The authors are not responsible for any damages or liabilities that may arise from its use. Always ensure proper backups and follow security best practices when working with network devices.
