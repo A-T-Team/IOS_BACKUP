@@ -15,3 +15,11 @@ The Network Device Configuration Backup Tool is a versatile and reliable applica
 - **Customizable Settings**: Tailor backup parameters such as backup location, file naming conventions, and backup frequency according to your organization's requirements.
 
 - **Logging and Notifications**: Keep track of backup activities through detailed logs, and set up notifications to alert administrators about successful or failed backup attempts.
+
+
+
+Contributing
+Contributions to the Network Device Configuration Backup Tool are welcome and encouraged! If you find any issues or have suggestions for improvements, please submit a pull request or create an issue in the GitHub repository. For major changes, please open a discussion first to ensure your proposed changes align with the project's goals.
+
+License
+This project is licensed under the MIT License - see the LICENSE file for details.
