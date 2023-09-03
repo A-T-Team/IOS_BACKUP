@@ -3,6 +3,7 @@ package local.atteam.iso_backup.ios_backup.entity;
 
 import jakarta.persistence.*;
 
+
 @Entity
 @Table(name = "device")
 public class Device {
@@ -31,6 +32,17 @@ public class Device {
     String password;
 
 
+
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "pool_id")
+//    @JsonIgnore
+    Pool pool;
+
+
+
+
     public Device() {
     }
 
@@ -43,6 +55,8 @@ public class Device {
         this.user = user;
         this.password = password;
     }
+
+
 
     public String getName() {
         return name;
@@ -100,6 +114,13 @@ public class Device {
         this.password = password;
     }
 
+    public Pool getPool() {
+        return pool;
+    }
+
+    public void setPool(Pool pool) {
+        this.pool = pool;
+    }
 
     @Override
     public String toString() {

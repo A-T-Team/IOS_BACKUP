@@ -12,7 +12,7 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/api")
 public class BackupRestController {
-    private DeviceService deviceService;
+    private final DeviceService deviceService;
 
     @Autowired
     public BackupRestController(DeviceService deviceService) {

@@ -3,44 +3,55 @@ package local.atteam.iso_backup.ios_backup.service;
 import com.jcraft.jsch.JSchException;
 import local.atteam.iso_backup.ios_backup.dao.BackupRepository;
 import local.atteam.iso_backup.ios_backup.dao.DeviceRepository;
+import local.atteam.iso_backup.ios_backup.dao.PoolRepository;
+import local.atteam.iso_backup.ios_backup.dto.CreateDeviceDTO;
+import local.atteam.iso_backup.ios_backup.dto.DeviceDTO;
+import local.atteam.iso_backup.ios_backup.dto.PoolDTO;
 import local.atteam.iso_backup.ios_backup.entity.Backup;
 import local.atteam.iso_backup.ios_backup.entity.Device;
+import local.atteam.iso_backup.ios_backup.entity.Pool;
 import local.atteam.iso_backup.ios_backup.exception.DeviceExistsException;
 import local.atteam.iso_backup.ios_backup.exception.DeviceNotFoundException;
 import local.atteam.iso_backup.ios_backup.message.DeviceStatusMessage;
 import local.atteam.iso_backup.ios_backup.utility.SSHCommand;
 import local.atteam.iso_backup.ios_backup.utility.SSHSession;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DeviceServiceImpl implements DeviceService {
 
 
-    private DeviceRepository deviceRepository;
-    private BackupRepository backupRepository;
+    private final DeviceRepository deviceRepository;
+    private final BackupRepository backupRepository;
+    private final PoolRepository poolRepository;
+    final ModelMapper modelMapper;
 
-//    @Autowired
-//    public DeviceServiceImpl(DeviceRepository deviceRepository) {
-//        this.deviceRepository = deviceRepository;
-//    }
 
     @Autowired
-    public DeviceServiceImpl(DeviceRepository deviceRepository, BackupRepository backupRepository) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, BackupRepository backupRepository, PoolRepository poolRepository, ModelMapper modelMapper) {
         this.deviceRepository = deviceRepository;
         this.backupRepository = backupRepository;
+        this.poolRepository = poolRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public List<Device> findAll() {
-        return deviceRepository.findAll();
+    public List<DeviceDTO> findAll() {
+        return deviceRepository.findAll().stream()
+                .map(d -> modelMapper.map(d,DeviceDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -54,7 +65,7 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Device findDeviceById(int id) {
+    public DeviceDTO findDeviceById(int id) {
         Optional<Device> res = deviceRepository.findById(id);
         Device device = null;
         if (res.isPresent()) {
@@ -62,7 +73,7 @@ public class DeviceServiceImpl implements DeviceService {
         } else {
             throw new DeviceNotFoundException("Device not found - ID: " + id);
         }
-        return device;
+        return modelMapper.map(device, DeviceDTO.class);
     }
 
     @Override
@@ -77,13 +88,24 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Transactional
     @Override
-    public Device saveDevice(Device device) {
+    public DeviceDTO saveDevice(CreateDeviceDTO device) {
+        System.out.println(device.getUser());
         String ip = device.getIp();
         Device existingDevice = findDeviceByIp(ip);
         if (existingDevice != null) {
             throw new DeviceExistsException("Device with IP " + ip + " already exists.");
         }
-        return deviceRepository.save(device);
+        Device newDevice = modelMapper.map(device, Device.class);
+        deviceRepository.save(newDevice);
+        Optional<Pool> poolOptional = poolRepository.findById(device.getPoolID());
+        System.out.println(device.getPoolID());
+        Pool pool = null;
+        if (poolOptional.isPresent()) {
+            pool = poolOptional.get();
+        }
+        System.out.println(pool);
+        pool.addDeviceToAPool(newDevice);
+        return modelMapper.map(newDevice, DeviceDTO.class);
     }
 
     @Transactional
@@ -131,11 +153,9 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Backup createBackup(Device device) throws JSchException {
-
         Backup backup = new Backup();
         Device device1 = findDeviceByName(device.getName());
         System.out.println(device1);
-
         SSHSession session = new SSHSession(device1);
         if (session.getSession() != null) {
             SSHCommand sshCommand = new SSHCommand(session, "show runn");
@@ -148,6 +168,30 @@ public class DeviceServiceImpl implements DeviceService {
         System.out.println(backup.getPayload());
         return backupRepository.save(backup);
     }
+
+    @Transactional
+    @Override
+    public PoolDTO savePool(PoolDTO PoolDto) {
+        Pool newPool = modelMapper.map(PoolDto, Pool.class);
+        poolRepository.save(newPool);
+        return modelMapper.map(newPool, PoolDTO.class);
+    }
+
+
+    public List<PoolDTO> findAllPools() {
+        List<PoolDTO> poolDTOList = new ArrayList<PoolDTO>();
+        return modelMapper.map(poolRepository.findAll(), new TypeToken<List<PoolDTO>>() {
+        }.getType());
+    }
+
+    @Override
+    public List<DeviceDTO> findAllDevicesByPool(int pool) {
+
+        return deviceRepository.findDeviceByPoolId(pool).stream()
+                .map(d -> modelMapper.map(d,DeviceDTO.class))
+                .collect(Collectors.toList());
+    }
+
 
 
     private String returnSimpleDateFormat() {
