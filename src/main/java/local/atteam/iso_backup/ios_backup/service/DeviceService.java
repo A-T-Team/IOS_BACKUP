@@ -1,6 +1,9 @@
 package local.atteam.iso_backup.ios_backup.service;
 
 import com.jcraft.jsch.JSchException;
+import local.atteam.iso_backup.ios_backup.dto.CreateDeviceDTO;
+import local.atteam.iso_backup.ios_backup.dto.DeviceDTO;
+import local.atteam.iso_backup.ios_backup.dto.PoolDTO;
 import local.atteam.iso_backup.ios_backup.entity.Backup;
 import local.atteam.iso_backup.ios_backup.entity.Device;
 import local.atteam.iso_backup.ios_backup.message.DeviceStatusMessage;
@@ -8,19 +11,19 @@ import local.atteam.iso_backup.ios_backup.message.DeviceStatusMessage;
 import java.util.List;
 
 public interface DeviceService {
-    List<Device> findAll();
+    List<DeviceDTO> findAll();
 
     List<Backup> findAllBackups();
 
     List<Device> findAllByVendor(String vendor);
 
-    Device findDeviceById(int id);
+    DeviceDTO findDeviceById(int id);
 
     Device findDeviceByName(String name);
 
     Device findDeviceByIp(String ip);
 
-    Device saveDevice(Device device);
+    DeviceDTO saveDevice(CreateDeviceDTO device);
 
     Backup saveBackup(Backup backup);
 
@@ -35,5 +38,12 @@ public interface DeviceService {
     DeviceStatusMessage checkIfDeviceReachable(Device device) throws JSchException;
 
     Backup createBackup(Device device) throws JSchException;
+
+    PoolDTO savePool(PoolDTO poolDto);
+
+    List<PoolDTO> findAllPools();
+
+    List<DeviceDTO> findAllDevicesByPool(int pool);
+
 
 }

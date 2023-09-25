@@ -1,9 +1,10 @@
 package local.atteam.iso_backup.ios_backup.rest;
 
 import com.jcraft.jsch.JSchException;
+import local.atteam.iso_backup.ios_backup.dto.CreateDeviceDTO;
+import local.atteam.iso_backup.ios_backup.dto.DeviceDTO;
 import local.atteam.iso_backup.ios_backup.entity.Backup;
 import local.atteam.iso_backup.ios_backup.entity.Device;
-import local.atteam.iso_backup.ios_backup.exception.DeviceNotFoundException;
 import local.atteam.iso_backup.ios_backup.message.DeviceStatusMessage;
 import local.atteam.iso_backup.ios_backup.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/api")
 public class DeviceRestController {
-    private DeviceService deviceService;
+    private final DeviceService deviceService;
 
 
     @Autowired
@@ -24,7 +25,7 @@ public class DeviceRestController {
     }
 
     @GetMapping("/devices")
-    public List<Device> findAll() {
+    public List<DeviceDTO> findAll() {
         return deviceService.findAll();
     }
 
@@ -34,8 +35,8 @@ public class DeviceRestController {
     }
 
     @GetMapping("/devices/id/{id}")
-    public Device findDeviceById(@PathVariable int id) {
-        Device device = deviceService.findDeviceById(id);
+    public DeviceDTO findDeviceById(@PathVariable int id) {
+        DeviceDTO device = deviceService.findDeviceById(id);
         if (device == null) {
             throw new RuntimeException("Device not found: " + id);
         }
@@ -53,26 +54,26 @@ public class DeviceRestController {
     }
 
     @PostMapping("/devices")
-    public Device addDevice(@RequestBody Device device) {
-        device.setId(0);
+    public DeviceDTO addDevice(@RequestBody CreateDeviceDTO device) {
+//        device.;
         return deviceService.saveDevice(device);
     }
 
-    @PutMapping("/devices")
-    public Device updateDevice(@RequestBody Device device) {
-        return deviceService.saveDevice(device);
+//    @PutMapping("/devices")
+//    public Device updateDevice(@RequestBody Device device) {
+//        return deviceService.saveDevice(device);
+//
+//    }
 
-    }
-
-    @DeleteMapping("/devices/{id}")
-    public void deleteDevice(@PathVariable int id) {
-        Device device = deviceService.findDeviceById(id);
-        if (device == null) {
-            throw new DeviceNotFoundException("Device not found: " + id);
-        }
-        deviceService.deleteDeviceById(id);
-
-    }
+//    @DeleteMapping("/devices/{id}")
+//    public void deleteDevice(@PathVariable int id) {
+//        Device device = deviceService.findDeviceById(id);
+//        if (device == null) {
+//            throw new DeviceNotFoundException("Device not found: " + id);
+//        }
+//        deviceService.deleteDeviceById(id);
+//
+//    }
 
     @DeleteMapping("/devices/delete/{ip}")
     public Device deleteDeviceByIp(@PathVariable String ip) {
@@ -90,5 +91,10 @@ public class DeviceRestController {
     @PostMapping("devices/backup")
     public Backup createBackup(@RequestBody Device device) throws JSchException {
         return deviceService.createBackup(device);
+    }
+
+    @GetMapping("/devices/pool/{pool}")
+    public List<DeviceDTO> findAllDevicesByPool(@PathVariable Integer pool) {
+        return deviceService.findAllDevicesByPool(pool);
     }
 }
