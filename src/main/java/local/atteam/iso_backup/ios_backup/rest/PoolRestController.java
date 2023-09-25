@@ -28,4 +28,8 @@ public class PoolRestController {
     public List<PoolDTO> findAll() {
         return deviceService.findAllPools();
     }
+
+//    Add number of the devices
+
+
 }

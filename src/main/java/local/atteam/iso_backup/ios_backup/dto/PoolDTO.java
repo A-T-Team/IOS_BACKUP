@@ -12,4 +12,7 @@ import lombok.Setter;
 public class PoolDTO {
     String name;
     String description;
+    int id;
+
+//    Return Pool ID
 }
