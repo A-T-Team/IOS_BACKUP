@@ -13,6 +13,8 @@ public class PoolDTO {
     String name;
     String description;
     int id;
+    int devicesAmount;
 
-//    Return Pool ID
+
+
 }

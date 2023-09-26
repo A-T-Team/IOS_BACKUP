@@ -98,13 +98,13 @@ public class DeviceServiceImpl implements DeviceService {
         Device newDevice = modelMapper.map(device, Device.class);
         deviceRepository.save(newDevice);
         Optional<Pool> poolOptional = poolRepository.findById(device.getPoolID());
-        System.out.println(device.getPoolID());
         Pool pool = null;
         if (poolOptional.isPresent()) {
             pool = poolOptional.get();
         }
-        System.out.println(pool);
+
         pool.addDeviceToAPool(newDevice);
+        System.out.println(pool);
         return modelMapper.map(newDevice, DeviceDTO.class);
     }
 

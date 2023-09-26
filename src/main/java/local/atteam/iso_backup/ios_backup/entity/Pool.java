@@ -2,6 +2,7 @@ package local.atteam.iso_backup.ios_backup.entity;
 
 import jakarta.persistence.*;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,19 @@ public class Pool {
             cascade = {CascadeType.ALL})
     List<Device> devices;
 
+    @Column(name = "devices_amount")
+    int devicesAmount;
+
+
+    public int getDevicesAmount() {
+        return devicesAmount;
+    }
+
+    public void setDevicesAmount() {
+        devicesAmount = devices.size();
+
+    }
+
     public Pool() {
     }
 
@@ -42,6 +56,9 @@ public class Pool {
         }
         devices.add(device);
         device.setPool(this);
+        this.setDevicesAmount();
+        System.out.println(this.getDevicesAmount());
+
 
     }
 
@@ -73,9 +90,11 @@ public class Pool {
         return devices;
     }
 
+
     public void setDevices(List<Device> devices) {
         this.devices = devices;
     }
+
 
     @Override
     public String toString() {
@@ -83,9 +102,9 @@ public class Pool {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", devicesAmount=" + devicesAmount +
                 '}';
     }
-
 
     void addDevice(Device device) {
         if (devices == null) {

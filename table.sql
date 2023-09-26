@@ -14,7 +14,7 @@ CREATE TABLE `pool` (
 
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
-device
+
 INSERT INTO `pool` VALUES
 	(1, 'Pool1', 'Pool 1 Description');
 
